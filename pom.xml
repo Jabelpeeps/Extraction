@@ -1,77 +1,106 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>mc.euro</groupId>
-    <artifactId>ex-parent</artifactId>
-    <packaging>pom</packaging>
-    <version>parent</version>
-    <name>Ex Parent POM</name>
+    <artifactId>extraction</artifactId>
+    <version>2.1.1</version>
+    <name>ArenaExtraction</name>
     <url>http://github.com/Europia79/Extraction</url>
     <properties>
         <maven.build.timestamp.format>MMdd</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <build.number>${env.BUILD_NUMBER}</build.number>
+        <craftbukkit.version>1.10.2-R0.1-SNAPSHOT</craftbukkit.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <modules>
-        <module>modules/api</module>
-        <module>modules/util</module>
-        <module>modules/v1_2_5</module>
-        <module>modules/v1_3_2</module>
-        <module>modules/v1_4_2</module>
-        <module>modules/v1_4_5</module>
-        <module>modules/v1_4_6</module>
-        <module>modules/v1_4_R1</module>
-        <module>modules/v1_5_R1</module>
-        <module>modules/v1_5_R2</module>
-        <module>modules/v1_5_R3</module>
-        <module>modules/v1_6_R1</module>
-        <module>modules/v1_6_R2</module>
-        <module>modules/v1_6_R3</module>
-        <module>modules/v1_7_R1</module>
-        <module>modules/v1_7_R2</module>
-        <module>modules/v1_7_R3</module>
-        <module>modules/v1_7_R4</module>
-        <module>modules/v1_8_R1</module>
-        <module>modules/v1_8_R2</module>
-        <module>modules/v1_8_R3</module>
-        <module>modules/v1_9_R1</module>
-        <module>modules/v1_9_R2</module>
-        <module>modules/v1_10_R1</module>
-        <module>modules/Extraction</module>
-    </modules>
-    <repositories>
+        <repositories>
         <repository>
-            <id>rainbowcraft-repo</id>
-            <url>http://rainbowcraft.sytes.net/maven/repository/</url>
-        </repository>
-        <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public</url>
-        </repository>
-        <repository>
-            <id>md_5-snapshots</id>
-            <url>http://repo.md-5.net/content/repositories/snapshots/</url>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
-        <repository>
+<!--         <repository>
             <id>vault-repo</id>
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
         <repository>
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/repositories/public/</url>
-        </repository>
+        </repository> -->
     </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${craftbukkit.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>    
+                    <groupId>net.md-5</groupId>
+                    <artifactId>bungeecord-chat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${craftbukkit.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>    
+                    <groupId>net.md-5</groupId>
+                    <artifactId>bungeecord-chat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>mc.alk</groupId>
+            <artifactId>BattleArena-lite</artifactId>
+            <version>3.9.10.15</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+            <scope>provided</scope>
+        </dependency>
+        
+    </dependencies>
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-                <version>2.4</version>
-            </extension>
-        </extensions>
+        <finalName>${project.name}.${project.version}-#${build.number}</finalName>
+        <sourceDirectory>./src</sourceDirectory>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>./src</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                    <include>config.yml</include>
+                    <include>HostageArenaConfig.yml</include>
+                    <include>VipArenaConfig.yml</include>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -81,12 +110,24 @@
                     <skip>false</skip>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                       
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    <distributionManagement>
-      <repository>
-        <id>rainbowcraft-repo</id>
-        <url>scp://23.29.127.102/var/www/maven/repository</url>
-      </repository>
-    </distributionManagement>
 </project>
